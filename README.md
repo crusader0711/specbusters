@@ -3,7 +3,10 @@
 
 **Who you gonna call? Seven specialists, one pipeline, humans on every gate.**
 
-Specbusters is a ready-to-adopt Kiro Crew: seven highly specialized agents that take a feature from spec to deploy under a strict review and security standard (LODESTAR). Fork it, fill the placeholders, run the setup runbook, and your team has a working crew on day one.
+Specbusters is a persistent, ready-to-adopt Kiro Crew: seven highly specialized agents that take a feature from spec to deploy under a strict review and security standard (LODESTAR). Fork it, fill the placeholders, run the setup runbook, and your team has a working crew on day one.
+
+## Why a persistent crew
+Work carries across sessions with context that survives restarts. Heartbeats keep agent status visible, scheduled jobs run recurring checks, and the crew reacts to CI/CD events by routing work to the right lane. Humans still sign every merge and press every deploy.
 
 ## The Crew
 | Agent | Role | Lane |
@@ -48,7 +51,7 @@ Specbusters is a ready-to-adopt Kiro Crew: seven highly specialized agents that 
 Static command dashboard for the crew — dark containment theme, zero backend,
 built on the static-spa v1.TW engine. Open `index.html` in a browser to
 preview (no server needed). Pages: **Capabilities** (the pitch — mission
-domains for geoservers, GEOINT, and space recon) · **Crew** (seven profile
+domains for geoservers and GEOINT) · **Crew** (seven profile
 cards) · **Gates** (T0–T15 board) · **Containment** (Phase-1 denials, Louis's
 seven verbs, install integrity, PM rules) · **Pipeline** (stage gauntlet +
 how-it-works) · **Operations** (dev-range rails, mission queue, PM, release
