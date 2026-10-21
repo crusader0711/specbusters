@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use or reference this project, please cite it as below."
+title: "Specbusters"
+type: software
+authors:
+  - alias: crusader0711
+repository-code: "https://github.com/crusader0711/specbusters"
+url: "https://crusader0711.github.io/specbusters/"
+license: MIT
+abstract: "Static command dashboard for Specbusters, a persistent spec-driven Kiro Crew baseline: seven specialist agents, gated pipeline, humans on every critical gate."

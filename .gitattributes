@@ -1,0 +1,12 @@
+* text=auto eol=lf
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.tar.gz binary
+dist/** linguist-generated
+RELEASE_MANIFEST.json linguist-generated
+SHA256SUMS linguist-generated

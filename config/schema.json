@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Site metadata",
+  "type": "object",
+  "required": ["name", "title", "tier", "pages_source", "site_root"],
+  "properties": {
+    "name": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "title": {"type": "string"},
+    "tier": {"enum": ["T1", "T2", "T3"]},
+    "pages_source": {"type": "string"},
+    "site_root": {"type": "string"}
+  },
+  "additionalProperties": false
+}

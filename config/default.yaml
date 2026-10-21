@@ -1,0 +1,6 @@
+# Site metadata (documentation only; the static site does not read this at runtime). No secrets.
+name: specbusters
+title: "Specbusters"
+tier: T1
+pages_source: "main:/"
+site_root: "."

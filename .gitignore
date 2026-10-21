@@ -1,0 +1,14 @@
+# repo template v1.0
+dist/
+.cache/
+.env
+.env.*
+*.pem
+*.key
+secrets/
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+node_modules/
