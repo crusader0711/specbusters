@@ -37,7 +37,7 @@
           <img src="${SITE.logo}" alt="SPECBUSTERS — master logo" class="w-full max-w-[360px] rounded-[14px] border border-line" loading="eager">
         </div>
         <h2 class="font-mono text-[18px] font-bold text-ink text-center mt-0 mb-1">Who you gonna call?</h2>
-        <p class="font-mono text-[12px] text-ink2 text-center mt-0 mb-1.5 max-w-[640px] mx-auto">Seven specialists, one pipeline, humans on every gate. A spec-driven Kiro Crew that takes geospatial, GEOINT, and space recon work from requirement to running service — under containment the whole way.</p>
+        ${INTRO.map((t, i) => `<p class="${i ? "text-[13px] text-ink2" : "font-mono text-[13px] text-ink font-semibold"} text-center mt-0 mb-2 max-w-[700px] mx-auto leading-relaxed">${t}</p>`).join("")}
         <p class="font-mono text-[10px] text-center mt-0 mb-3"><span class="text-ecto">🟢 Baseline v0.x</span> · <span class="text-warn">🟡 Dashboard in progress</span> · <span class="text-ink2">🔒 Public release pending</span></p>
         <div class="hazard mb-4" role="presentation"></div>
 
@@ -50,12 +50,17 @@
         </div>
 
         ${label("How the Crew Wins")}
-        <div class="grid gap-3" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="grid gap-3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
           ${VALUE.map((v) => `
             <div class="bg-surface border border-line rounded-[10px] px-4 py-3.5">
               <div class="font-mono text-[12px] font-bold text-accent uppercase tracking-wide">${v.t}</div>
               <p class="text-[12.5px] text-ink2 mt-1.5 mb-0 leading-snug">${v.b}</p>
             </div>`).join("")}
+        </div>
+
+        ${label(KIRO_VALUE.t)}
+        <div class="bg-surface border border-line rounded-[10px] px-4 py-3.5">
+          ${KIRO_VALUE.b.map((t) => `<p class="text-[12.5px] text-ink2 my-1.5 leading-relaxed">${t}</p>`).join("")}
         </div>
 
         ${label("Mission Domains")}
@@ -64,9 +69,7 @@
             <div class="bg-surface border ${toneBorder[m.tone]} rounded-[12px] px-4 py-4">
               <h3 class="font-mono text-[14px] font-bold ${toneText[m.tone]} m-0 tracking-wide">${m.name}</h3>
               <p class="text-[12.5px] text-ink mt-1.5 mb-2.5 leading-snug font-semibold">${m.hook}</p>
-              <ul class="list-none p-0 m-0">
-                ${m.caps.map((x) => `<li class="text-[12px] text-ink2 leading-snug mb-1.5 pl-4 relative"><span class="absolute left-0 ${toneText[m.tone]} font-bold">▸</span>${x}</li>`).join("")}
-              </ul>
+              <p class="text-[12.5px] text-ink2 m-0 leading-relaxed">${m.body}</p>
               <div class="font-mono text-[10.5px] ${toneText[m.tone]} mt-3 pt-2.5 border-t border-line leading-snug">${m.proof}</div>
             </div>`).join("")}
         </div>
@@ -84,8 +87,8 @@
       const { esc } = ctx;
       el.innerHTML = `
         <h2 class="font-mono text-[20px] font-bold text-ink mt-1 mb-0.5">The Crew</h2>
-        <p class="font-mono text-[11px] text-ink2 mt-0 mb-3">Seven agents · one lane each · the crew is itself a P0 system</p>
-        <div class="breach-banner px-4 py-3 mb-4 font-mono text-[12px] font-semibold text-accent">⛔ PHASE 1 PERMANENT — remote access, registry push/login, and cloud apply are denied for EVERY agent. Louis included.</div>
+        <p class="text-[13px] text-ink2 mt-0 mb-3">${esc(CREW_INTRO)}</p>
+        <div class="breach-banner px-4 py-3 mb-4 font-mono text-[12px] font-semibold text-accent">${esc(CREW_BANNER)}</div>
         <div class="grid gap-3.5" style="grid-template-columns:repeat(auto-fill,minmax(270px,1fr))">
           ${CREW.map((b) => `
           <div class="bot-card">
@@ -96,9 +99,7 @@
                 ${badge(esc(b.lane), b.lane === "DEPLOYER" ? "err" : b.lane === "ADHOC" ? "mut" : "ok")}
               </div>
               <div class="font-mono text-[10px] tracking-wider text-ink2 uppercase mt-3 pt-2.5 border-t border-line">Charge</div>
-              <p class="text-[12.5px] text-ink mt-0.5 mb-0 leading-snug">${esc(b.charge)}</p>
-              <div class="font-mono text-[10px] tracking-wider text-ink2 uppercase mt-2.5">Containment Note</div>
-              <p class="font-mono text-[11.5px] text-warn mt-0.5 mb-0 leading-snug">${esc(b.note)}</p>
+              <p class="text-[12.5px] text-ink mt-0.5 mb-0 leading-relaxed">${esc(b.charge)}</p>
               <div class="font-mono text-[10px] tracking-wider text-ink2 uppercase mt-2.5">Hard Limits</div>
               ${panelList(b.limits.map(esc))}
             </div>
@@ -109,25 +110,24 @@
     gates(el, ctx) {
       el.innerHTML = `
         <h2 class="font-mono text-[20px] font-bold text-ink mt-1 mb-0.5">Gate Tests — T0–T15</h2>
-        <p class="font-mono text-[11px] text-ink2 mt-0 mb-3">Run per instance · statuses live in js/data.js → GATES · T1–T15 labels DRAFT, sync with Build Guide v4.0</p>
-        ${panel("Gate Rules", panelList(GATE_RULES, "§", "text-accent"), "border-flash/60")}
+        <p class="text-[13px] text-ink2 mt-0 mb-3 leading-relaxed max-w-[820px]">${GATE_INTRO}</p>
         <div class="mt-3 overflow-x-auto bg-surface border border-line rounded-[10px]">
           <table class="w-full border-collapse min-w-[560px]">
             <thead><tr>
               <th class="text-left font-mono text-[10px] tracking-wider uppercase text-ink2 px-3.5 py-2.5 border-b border-line">Gate</th>
-              <th class="text-left font-mono text-[10px] tracking-wider uppercase text-ink2 px-3.5 py-2.5 border-b border-line">Proves</th>
+              <th class="text-left font-mono text-[10px] tracking-wider uppercase text-ink2 px-3.5 py-2.5 border-b border-line">What it proves</th>
               <th class="text-left font-mono text-[10px] tracking-wider uppercase text-ink2 px-3.5 py-2.5 border-b border-line">Status</th>
             </tr></thead>
             <tbody>${GATES.map((g) => `
               <tr class="hover:bg-bg">
-                <td class="px-3.5 py-2.5 border-b border-line font-mono text-[12px] font-bold text-ink">${g.id}</td>
+                <td class="px-3.5 py-2.5 border-b border-line font-mono text-[12px] font-bold text-ink whitespace-nowrap">${g.id}</td>
                 <td class="px-3.5 py-2.5 border-b border-line font-mono text-[12px] text-ink2">${g.what}</td>
                 <td class="px-3.5 py-2.5 border-b border-line">${badge(g.status, g.status)}</td>
               </tr>`).join("")}
             </tbody>
           </table>
         </div>
-        <p class="hint mt-2.5">Seeded defect battery <span class="text-accent font-bold">D1–D7</span> is scored under T13 — reviewer and appsec detection rate is the metric that matters.</p>`;
+`;
     },
 
     guard(el, ctx) {
@@ -148,7 +148,7 @@
     pipeline(el, ctx) {
       el.innerHTML = `
         <h2 class="font-mono text-[20px] font-bold text-ink mt-1 mb-0.5">Pipeline — GitLab Free Template</h2>
-        <p class="font-mono text-[11px] text-ink2 mt-0 mb-3">Every agent branch walks the gauntlet. The last stage has a human finger on it.</p>
+        <p class="text-[13px] text-ink2 mt-0 mb-3">${PIPE_INTRO}</p>
         <div class="bg-surface border border-line rounded-[10px] px-4 py-4 mb-3">
           <div class="stage-rail">${PIPE_STAGES.map((s, i) => `
             ${i ? '<span class="stage-link"></span>' : ""}
@@ -165,7 +165,7 @@
               <p class="text-[11.5px] text-ink2 mt-1 mb-0 leading-snug">${b}</p>
             </div>`).join("")}
         </div>
-        ${panel("Rules of the Road", panelList(PIPE_RULES, "§", "text-accent"))}`;
+        <div class="bg-surface border border-line rounded-[10px] px-4 py-3.5"><p class="text-[12.5px] text-ink2 m-0 leading-relaxed">${PIPE_RULES}</p></div>`;
     },
 
     ops(el, ctx) {

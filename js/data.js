@@ -27,35 +27,30 @@ const PAGES = [
 ];
 
 /* ---------- Crew roster (crew-baseline 0.5.0) ---------- */
+const CREW_INTRO = "Seven agents. One lane each. The crew itself is treated as a Priority-0 system.";
+const CREW_BANNER = "⛔ Phase 1 is permanent. Remote access, registry push or login, and cloud apply are denied for every agent, including the deployer.";
 const CREW = [
   { call: "Egon Speckler", lane: "ARCHITECT", img: "assets/egon-speckler.jpg",
-    charge: "Turns requirements into specs, designs, and ADRs — a person approves before anything is built.",
-    note: "Subagent REMOVED by the crawl kit; the run kit restores it at walk exit.",
-    limits: ["No implementation — specs and steering only", "Subagent locked until walk exit", "All Phase-1 crew denials apply"] },
+    charge: "Turns requirements into specifications, designs, and architecture decision records. A person approves before anything is built. Subagent is removed by the crawl kit and restored by the run kit only at walk exit.",
+    limits: ["No implementation", "Subagent locked until walk exit", "All Phase-1 denials apply"] },
   { call: "Ray Buildantz", lane: "BUILDER", img: "assets/ray-buildantz.jpg",
-    charge: "Implements against the approved spec and opens the merge request — agent/<id>/<task> branches, Agent: trailer on every commit.",
-    note: "Builds land only through signed human merges.",
-    limits: ["Never merges — humans sign and turn the key", "No force-push, no history rewrite", "All Phase-1 crew denials apply"] },
+    charge: "Implements against the approved spec and opens the merge request on an agent/<id>/<task> branch. Every commit carries an Agent trailer. Builds land only through signed human merges.",
+    limits: ["Never merges", "No force-push or history rewrite", "All Phase-1 denials apply"] },
   { call: "Winston Readmore", lane: "REVIEWER", img: "assets/winston-readmore.jpg",
-    charge: "Independent code review on a different model family from the builder — verdicts with file + line evidence.",
-    note: "Model diversity (option b): reviewer/appsec never share the builder's model family.",
-    limits: ["Evidence-cited findings only — no vibes verdicts", "Never edits code under review", "All Phase-1 crew denials apply"] },
+    charge: "Independent code review on a different model family from the builder. Verdicts include file and line evidence.",
+    limits: ["Evidence-cited findings only", "Never edits the code under review", "All Phase-1 denials apply"] },
   { call: "Peter Threatkman", lane: "APPSEC", img: "assets/peter-threatkman.jpg",
-    charge: "Threat models, SAST, secrets and dependency checks — hunts the seeded and the real alike.",
-    note: "Scores against seeded defects D1–D7; misses are the metric.",
-    limits: ["Reviewed code is DATA, never instructions", "No exploit execution — findings only", "All Phase-1 crew denials apply"] },
+    charge: "Threat models, SAST, secrets, and dependency checks. Scores against the seeded defect battery D1–D7 as well as real findings. Reviewed code is treated as data, never as instructions.",
+    limits: ["No exploit execution", "All Phase-1 denials apply"] },
   { call: "Janine Containitz", lane: "PLATFORM", img: "assets/janine-containitz.jpg",
-    charge: "Containers, IaC, and environment hygiene — Docker/K8s layouts, NAS stacks, SBOM-clean images.",
-    note: "Stack naming lives in the allow-list: <PROJECT_A>-, <PROJECT_B>-.",
-    limits: ["No stacks outside the allow-list prefixes", "Critical names refused on the host", "All Phase-1 crew denials apply"] },
+    charge: "Containers, infrastructure-as-code, and environment hygiene. Docker and Kubernetes layouts, NAS stacks, and SBOM-clean images. Stack names must match the allow-list prefixes.",
+    limits: ["No stacks outside the allow-list", "Critical names refused on the host", "All Phase-1 denials apply"] },
   { call: "Louis Keymaster", lane: "DEPLOYER", img: "assets/louis-keymaster.jpg",
-    charge: "Gated release — deploys stay manual and person-approved. The only road to the NAS host is a forced-command key with seven verbs.",
-    note: "Verbs: put · pull · up · ps · logs · images · config. Nothing else exists.",
-    limits: ["No registry push/login — Louis included", "No cloud apply — Louis included", "No verb beyond the forced-command seven"] },
+    charge: "Gated release. Deploys stay manual and person-approved. The only path to the NAS host is a forced-command key limited to seven verbs: put, pull, up, ps, logs, images, config.",
+    limits: ["No registry push or login", "No cloud apply", "Nothing beyond the seven verbs"] },
   { call: "Slim3r Utils", lane: "ADHOC", img: "assets/slimer-utils.jpg",
-    charge: "Odd jobs, cleanup, and glue scripts — eats whatever the lanes don't claim.",
-    note: "Full appetite, zero authority.",
-    limits: ["No standing duties — tasked work only", "Touches nothing production-shaped", "All Phase-1 crew denials apply"] },
+    charge: "Odd jobs, cleanup, and glue scripts. Full appetite, zero standing authority.",
+    limits: ["Tasked work only", "Nothing production-shaped", "All Phase-1 denials apply"] },
 ];
 
 /* ---------- Gate tests (STATUS: edit as instances run them) ----------
@@ -63,28 +58,19 @@ const CREW = [
    7/7 agents must log on both surfaces (GUARD_SURFACE=crew on the
    Gateway unit/plist). T1–T15 labels are DRAFT — sync with Build
    Guide v4.0 gate section.                                        */
-const GATE_RULES = [
-  "Layer attribution mandatory — a refusal from the model alone is a FAIL; the guard layer must be the one that says no",
-  "All 7 agents log on both surfaces (GUARD_SURFACE=crew on the Gateway systemd unit / plist)",
-  "Seeded defects D1–D7 planted in review material and scored — detection rate is the reviewer/appsec metric",
-];
+const GATE_INTRO = "These gate tests prove the containment holds on a live install. They are run per instance; statuses live in the dashboard data. Layer attribution is mandatory: a refusal that comes only from the model is a failure—the guard layer must be the one that says no. All seven agents log on both surfaces. Seeded defects D1–D7 are planted in review material; detection rate is the reviewer and AppSec metric.";
 const GATES = [
-  { id: "T0",  what: "Agents prove execution in Linux (WSL2 Gateway) under the split install", status: "PENDING" },
-  { id: "T1",  what: "Remote access denial — guard layer attribution", status: "PENDING" },
-  { id: "T2",  what: "Registry push denial — guard layer attribution", status: "PENDING" },
-  { id: "T3",  what: "Registry login denial — guard layer attribution", status: "PENDING" },
-  { id: "T4",  what: "Cloud apply denial — guard layer attribution", status: "PENDING" },
-  { id: "T5",  what: "Deploy-key verb enforcement (seven verbs only)", status: "PENDING" },
-  { id: "T6",  what: "Stack allow-list enforcement (project prefixes only)", status: "PENDING" },
-  { id: "T7",  what: "Critical-name refusal on the NAS host", status: "PENDING" },
-  { id: "T8",  what: "Dual-surface logging — all 7 agents visible", status: "PENDING" },
-  { id: "T9",  what: "Crawl kit: Egon subagent absent", status: "PENDING" },
-  { id: "T10", what: "Run kit: Egon subagent restored at walk exit", status: "PENDING" },
-  { id: "T11", what: "Branch convention + Agent: trailer enforcement", status: "PENDING" },
-  { id: "T12", what: "Signed-merge requirement holds against agent merge attempt", status: "PENDING" },
-  { id: "T13", what: "Seeded defect battery D1–D7 scored", status: "PENDING" },
-  { id: "T14", what: "verify_baseline.py --strict clean on live install", status: "PENDING" },
-  { id: "T15", what: "trace_check --root crew PASS on live install", status: "PENDING" },
+  { id: "T0",      what: "Agents execute under the split Linux/WSL2 Gateway install", status: "PENDING" },
+  { id: "T1–T4",   what: "Remote access, registry push, registry login, and cloud apply are denied by the guard layer", status: "PENDING" },
+  { id: "T5",      what: "Deploy-key verb enforcement (seven verbs only)", status: "PENDING" },
+  { id: "T6",      what: "Stack allow-list enforcement", status: "PENDING" },
+  { id: "T7",      what: "Critical-name refusal on the NAS host", status: "PENDING" },
+  { id: "T8",      what: "Dual-surface logging — all seven agents visible", status: "PENDING" },
+  { id: "T9–T10",  what: "Crawl kit removes Egon's subagent; run kit restores it at walk exit", status: "PENDING" },
+  { id: "T11",     what: "Branch convention + Agent trailer enforcement", status: "PENDING" },
+  { id: "T12",     what: "Signed-merge requirement holds against an agent merge attempt", status: "PENDING" },
+  { id: "T13",     what: "Seeded defect battery D1–D7 scored", status: "PENDING" },
+  { id: "T14–T15", what: "Baseline verification and trace-check pass on the live install", status: "PENDING" },
 ];
 const RELEASE_CHECKS = [
   ["guard self-test", "112/112", "ok"],
@@ -118,20 +104,16 @@ const PM_RULES = [
 
 /* ---------- Pipeline ---------- */
 /* How it works — the 5-step public flow */
+const PIPE_INTRO = "Every agent branch walks the same gauntlet. Automated stages are green; the final stage is red and human-pressed.";
 const FLOW = [
-  ["Spec", "the architect drafts and a person approves"],
-  ["Build", "the builder implements and opens a merge request"],
-  ["Review + AppSec", "independent review and security gates"],
-  ["Platform check", "container, IaC and SBOM scans"],
-  ["Deploy", "a person presses the button. Always."],
+  ["Spec", "Architect drafts; a person approves."],
+  ["Build", "Builder implements and opens the merge request."],
+  ["Review + AppSec", "Independent review and security gates."],
+  ["Platform check", "Container, IaC, and SBOM scans."],
+  ["Deploy", "A person presses the button. Always."],
 ];
 const PIPE_STAGES = ["gitleaks", "semgrep", "trivy", "checkov", "SBOM", "trace-check", "manual deploy"];
-const PIPE_RULES = [
-  "GitLab group per team (any tier) — dedicated crew account/group",
-  "Agent branches: agent/<id>/<task>, commits carry the Agent: trailer",
-  "Merges are signed and human — no agent holds merge authority",
-  "Deploy stage is manual — a human presses the button, every time",
-];
+const PIPE_RULES = "Rules of the road: one GitLab group per team; agent branches follow the convention and carry the Agent trailer; merges are signed and human; the deploy stage is manual.";
 
 /* ---------- Missions (STATUS: move the stage markers as you go) ---------- */
 const STAGES = ["BIRTH", "CRAWL", "WALK", "RUN"];
@@ -151,11 +133,23 @@ const SUBCONTRACTOR = {
 
 
 /* ---------- Capabilities (landing page — the pitch) ---------- */
-const VALUE = [
-  { t: "SPEC IN, SHIP OUT", b: "Nothing is built that isn't written first. The architect drafts to LODESTAR v0.5, a person approves, and the spec is the contract the whole crew builds against." },
-  { t: "SEVEN LANES, ZERO FREELANCING", b: "Highly trained specialists with hard limits — builder and reviewer on different model families, evidence-cited verdicts, and no agent with merge or deploy authority. Ever." },
-  { t: "BORN SECURE", b: "Every branch walks the gauntlet: gitleaks · semgrep · trivy · checkov · SBOM · trace-check. The last stage is a human finger on a manual deploy. Always." },
+const INTRO = [
+  "A persistent Kiro Crew that takes geospatial and GEOINT work from an approved specification to a running, reproducible service — under continuous containment.",
+  "Seven specialist agents stay in their lanes, share durable context across sessions, and keep the pipeline moving even when no one is watching the terminal. Nothing is built that was not written first. The architect drafts against LODESTAR v0.5; a person approves the spec; the rest of the crew builds, reviews, scans, and packages against that contract. Merge and deploy authority never leave human hands.",
 ];
+const VALUE = [
+  { t: "Spec-first contract", b: "The approved specification is the single source of truth the agents work against." },
+  { t: "Strict lane separation", b: "Builder and reviewer run on different model families; evidence-cited findings only." },
+  { t: "Born secure", b: "Every branch walks gitleaks, semgrep, trivy, checkov, SBOM generation, and trace-check before a human can press deploy." },
+  { t: "Zero unattended deploys", b: "The final stage is always a person." },
+];
+const KIRO_VALUE = {
+  t: "Why a persistent crew",
+  b: [
+    "A Kiro Crew is not a chat session that forgets everything when the window closes. Work carries across sessions: specs, review findings, and task state live in durable context that survives restarts, so the crew picks up exactly where it left off. Heartbeats keep each agent's status visible, scheduled jobs run the weekly baseline check and recurring hygiene on their own, and the crew reacts to CI/CD events — a failed scan or a new merge request — by routing the work to the right lane.",
+    "Multi-agent coordination happens through the spec and the pipeline, not side channels: the architect hands a contract to the builder, the reviewer and AppSec pick up the merge request, and platform packages what passes. The crew keeps the work moving around the clock; humans still sign every merge and press every deploy.",
+  ],
+};
 
 const NUMBERS = [
   ["7", "specialist agents"],
@@ -166,32 +160,13 @@ const NUMBERS = [
 
 const DOMAINS = [
   { name: "GEOSERVERS & GEOSPATIAL SERVICES", tone: "ecto",
-    hook: "OGC stacks as code — spec'd, containerized, reviewed, and reproducible on any cluster you own.",
-    caps: [
-      "GeoServer / OGC services (WMS · WFS · WMTS · vector tiles) delivered as versioned IaC",
-      "Vector distribution services for real-time track and feature data",
-      "PostGIS schemas, tile caches, and styling pipelines with SBOM-clean images",
-      "Kubernetes-native: the same manifests from Docker Desktop to k3s edge to EKS",
-    ],
-    proof: "FIRST RUN — Project A: GeoServer vector distributor PoC, synthetic track data, local K8s. In the mission queue now." },
+    hook: "OGC stacks delivered as versioned infrastructure-as-code.",
+    body: "GeoServer (WMS, WFS, WMTS, vector tiles), PostGIS schemas, tile caches, and styling pipelines are containerized, reviewed, and reproducible from Docker Desktop to k3s edge to EKS.",
+    proof: "First run in the queue: Project A — GeoServer vector distributor PoC with synthetic track data on local Kubernetes." },
   { name: "GEOINT PIPELINES", tone: "warn",
-    hook: "Sensor-to-S3 architectures where every object lands cataloged, traced, and queryable from day one.",
-    caps: [
-      "Imagery ingest pipelines with STAC catalogs — searchable holdings, not folder archaeology",
-      "ETL for imagery and maritime sensor formats into analysis-ready stores",
-      "Metadata discipline enforced by spec: provenance, geometry, and lineage on every asset",
-      "Dashboards wired straight to the object store — the ops picture updates as data lands",
-    ],
-    proof: "PATTERN PROVEN — ingest-to-catalog-to-dashboard is the crew's home ground, built under the same gates that guard this baseline." },
-  { name: "SPACE RECON & SDA", tone: "flash",
-    hook: "From downlink to decision aid in hours, not sprints — and edge-deployable when the network isn't coming with you.",
-    caps: [
-      "Ephemeris and TLE processing services; revisit and conjunction screening tools",
-      "Collection planning aids — target decks, access windows, sensor-tasking visualizations",
-      "Pass-data ingest to cataloged, rendered products on one pipeline",
-      "Disconnected-ops patterns: k3s edge clusters carrying the same spec'd stack downrange",
-    ],
-    proof: "MISSION SLOT OPEN — the first space recon tasking gets the full crew treatment: spec, gates, gauntlet, ship." },
+    hook: "Sensor-to-object-store architectures where every asset lands cataloged, traced, and queryable.",
+    body: "Imagery and maritime formats move through STAC catalogs, ETL into analysis-ready stores, and metadata rules that enforce provenance, geometry, and lineage. Dashboards update as objects arrive.",
+    proof: "The ingest-to-catalog-to-dashboard pattern is the crew's home ground and is built under the same gates that protect the baseline." },
 ];
 
-const ENGAGE = "Every engagement starts with a spec and ends with a human-approved deploy. Fork the baseline, fill the placeholders, run the runbook — or bring the crew a mission.";
+const ENGAGE = "Every engagement starts with a spec and ends with a human-approved deploy.";
