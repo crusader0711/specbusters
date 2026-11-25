@@ -25,6 +25,7 @@ python3 -m http.server 8000   # local preview
 ## Conventions
 - Conventional Commits; short-lived `feat/` `fix/` branches; PRs into `main`; squash-merge by a human.
 - Add a line under `[Unreleased]` in `CHANGELOG.md` for every user-visible change.
+- Backlog SoT is `docs/BACKLOG.md` (IDs `BL.NN`, never reused); idea text must pass the PII scan.
 - New images: pre-optimized JPG in `assets/`, metadata stripped (`exiftool -all=` or equivalent).
 
 ## Guardrails

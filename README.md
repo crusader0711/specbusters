@@ -100,6 +100,7 @@ and queue states are marked `STATUS:`. Theme tokens: `css/style.css`.
 | `make clean` | Remove `dist/` and caches |
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md) and [WIKI.md](WIKI.md).
+Ideas for consideration live in [docs/BACKLOG.md](docs/BACKLOG.md) (intake template: [.github/ISSUE_TEMPLATE/idea.yml](.github/ISSUE_TEMPLATE/idea.yml)).
 
 ## License
 
